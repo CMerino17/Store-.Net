@@ -15,7 +15,7 @@ namespace bootcamp_store_backend.Infrastructure.Rest
 
         [HttpGet]
         [Produces("application/json")]
-        public ActionResult<IEnumerable<D>> Get()
+        public virtual ActionResult<IEnumerable<D>> Get()
         {
             var dto = _service.GetAll();
             return Ok(dto);
@@ -23,7 +23,7 @@ namespace bootcamp_store_backend.Infrastructure.Rest
 
         [HttpGet("{id}")]
         [Produces("application/json")]
-        public ActionResult<D> Get(long id)
+        public virtual ActionResult<D> Get(long id)
         {
             try
             {
