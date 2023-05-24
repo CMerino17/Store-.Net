@@ -2,12 +2,7 @@
 
 namespace bootcamp_store_backend.Domain.Persistence
 {
-    public interface ICategoryRepository
+    public interface ICategoryRepository : IGenericRepository<Category>
     {
-        void Delete(long id);
-        List<Category> GetAll();
-        Category GetById(long id);
-        Category Insert(Category category);
-        Category Update(Category category);
     }
 }
