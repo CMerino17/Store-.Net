@@ -18,36 +18,36 @@ namespace bootcamp_store_backend.Application.Services
             _mapper = mapper;
         }
 
-        public void Delete(long id)
+        public virtual void Delete(long id)
         {
             _repository.Delete(id);
         }
 
-        public List<D> GetAll()
+        public virtual List<D> GetAll()
         {
-            var categories = _repository.GetAll();
-            var categoriesDto = _mapper.Map<List<D>>(categories);
-            return categoriesDto;
+            var entities = _repository.GetAll();
+            var dtos = _mapper.Map<List<D>>(entities);
+            return dtos;
         }
 
-        public D Get(long id)
+        public virtual D Get(long id)
         {
-            var category = _repository.GetById(id);
-            return _mapper.Map<D>(category);
+            var entity = _repository.GetById(id);
+            return _mapper.Map<D>(entity);
         }
 
-        public D Insert(D dto)
+        public virtual D Insert(D dto)
         {
             E entity = _mapper.Map<E>(dto);
             entity = _repository.Insert(entity);
             return _mapper.Map<D>(entity);
         }
 
-        public D Update(D dto)
+        public virtual D Update(D dto)
         {
-            E category = _mapper.Map<E>(dto);
-            category = _repository.Update(category);
-            return _mapper.Map<D>(category);
+            E entity = _mapper.Map<E>(dto);
+            entity = _repository.Update(entity);
+            return _mapper.Map<D>(entity);
         }
     }
 }
