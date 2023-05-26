@@ -2,6 +2,8 @@
 using bootcamp_store_backend.Domain.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace bootcamp_store_backend.Infrastructure.Persistence
 {
@@ -56,6 +58,38 @@ namespace bootcamp_store_backend.Infrastructure.Persistence
             return entity;
         }
 
+        protected virtual IQueryable<T> ApplySortOrder(IQueryable<T> entities, string sortOrder)
+        {
+            var orderByParameters = sortOrder.Split(',');
+            var orderByAttribute = Char.ToUpper(orderByParameters[0][0]) + orderByParameters[0][1..];
+            var orderByDirection = orderByParameters.Length > 1 ? orderByParameters[1] : "asc";
+
+            var propertyInfo = typeof(T).GetProperty(orderByAttribute, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
+            if (propertyInfo != null)
+            {
+                var parameter = Expression.Parameter(typeof(Item), "x");
+                var property = Expression.Property(parameter, propertyInfo);
+
+                if (propertyInfo.PropertyType.IsValueType)
+                {
+                    var orderByExpression = Expression.Lambda<Func<T, dynamic>>(Expression.Convert(property, typeof(object)), parameter);
+
+                    entities = orderByDirection.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                        ? entities.OrderBy(orderByExpression)
+                        : entities.OrderByDescending(orderByExpression);
+                }
+                else
+                {
+                    var orderByExpression = Expression.Lambda<Func<T, object>>(property, parameter);
+
+                    entities = orderByDirection.Equals("asc", StringComparison.OrdinalIgnoreCase)
+                        ? entities.OrderBy(orderByExpression)
+                        : entities.OrderByDescending(orderByExpression);
+                }
+            }
+            return entities;
+        }
         
     }
 }
