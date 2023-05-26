@@ -39,7 +39,7 @@ namespace bootcamp_store_backend.Infrastructure.Rest
         [HttpPost]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public ActionResult<D> Insert(D dto)
+        public virtual ActionResult<D> Insert(D dto)
         {
             if (dto == null)
             {
@@ -52,7 +52,7 @@ namespace bootcamp_store_backend.Infrastructure.Rest
         [HttpPut]
         [Produces("application/json")]
         [Consumes("application/json")]
-        public ActionResult<D> Update(D dto)
+        public virtual ActionResult<D> Update(D dto)
         {
             if (dto == null)
             {

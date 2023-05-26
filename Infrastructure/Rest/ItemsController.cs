@@ -1,6 +1,7 @@
 ﻿using bootcamp_store_backend.Application;
 using bootcamp_store_backend.Application.Dtos;
 using bootcamp_store_backend.Application.Services;
+using bootcamp_store_backend.Domain.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace bootcamp_store_backend.Infrastructure.Rest
@@ -10,10 +11,12 @@ namespace bootcamp_store_backend.Infrastructure.Rest
     public class ItemsController : GenericCrudController<ItemDto>
     {
         private IItemService _itemService;
+        private readonly ILogger _logger;
 
-        public ItemsController(IItemService service) : base(service)
+        public ItemsController(IItemService service, ILogger<CategoriesController> logger) : base(service)
         {
             _itemService = service;
+            _logger = logger;
         }
 
 
@@ -51,6 +54,32 @@ namespace bootcamp_store_backend.Infrastructure.Rest
         {
             var categoriesDto = _itemService.GetAllByCategoryId(categoryId);
             return Ok(categoriesDto);
+        }
+
+        public override ActionResult<ItemDto> Insert(ItemDto dto)
+        {
+            try
+            {
+                return base.Insert(dto);
+            }
+            catch (InvalidImageException)
+            {
+                _logger.LogInformation("Invalid image inserting category with {dto.Name} name", dto.Name);
+                return BadRequest();
+            }
+        }
+
+        public override ActionResult<ItemDto> Update(ItemDto dto)
+        {
+            try
+            {
+                return base.Update(dto);
+            }
+            catch (InvalidImageException)
+            {
+                _logger.LogInformation("Invalid image updating category with {dto.Id} Id", dto.Id);
+                return BadRequest();
+            }
         }
     }
 }

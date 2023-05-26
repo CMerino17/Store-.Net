@@ -12,6 +12,15 @@ namespace bootcamp_store_backend.Infrastructure.Persistence
             base.OnConfiguring(optionsBuilder);
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Item>()
+                .HasOne(i => i.Category)
+                .WithMany()
+                .HasForeignKey(i => i.CategoryId)
+                .IsRequired();
+        }
+
         public DbSet<Category> Categories { get; set; }
         public DbSet<Item> Items { get; set; }
     }
