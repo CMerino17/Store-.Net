@@ -65,9 +65,9 @@ namespace bootcamp_store_backend.Infrastructure.Persistence
             return item;
         }
 
-        public PagedList<Item> GetItemsByCriteriaPaged(string? filter, PaginationParameters paginationParameters)
+        public PagedList<ItemDto> GetItemsByCriteriaPaged(string? filter, PaginationParameters paginationParameters)
         {
-            var items = _storeContext.Items.Include(i => i.Category).AsQueryable();
+            var items = _storeContext.Items.AsQueryable();
 
             if (!string.IsNullOrEmpty(filter))
             {
@@ -80,7 +80,18 @@ namespace bootcamp_store_backend.Infrastructure.Persistence
                 items = ApplySortOrder(items, paginationParameters.Sort);
             }
 
-            return PagedList<Item>.ToPagedList(items, paginationParameters.pageNumber, paginationParameters.pageSize);
+            var itemsDto = items.Select(i => new ItemDto
+            {
+                Id = i.Id,
+                Name = i.Name,
+                Description = i.Description,
+                Price = i.Price,
+                Image = i.Image,
+                CategoryId  = i.CategoryId,
+                CategoryName = i.Category.Name
+            });
+
+            return PagedList<ItemDto>.ToPagedList(itemsDto, paginationParameters.pageNumber, paginationParameters.pageSize);
         }
     }
 }

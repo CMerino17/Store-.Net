@@ -12,7 +12,7 @@ namespace bootcamp_store_backend.Infrastructure.Persistence
         protected readonly DbContext _context;
         protected readonly DbSet<T> _dbSet;
 
-        public GenericRepository(StoreContext storeContext)
+        public GenericRepository(DbContext storeContext)
         {
             _context = storeContext;
             _dbSet = _context.Set<T>();

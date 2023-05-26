@@ -7,11 +7,11 @@ namespace bootcamp_store_backend.Infrastructure.Rest
 {
     [Route("store/[controller]")]
     [ApiController]
-    public class ItemController : GenericCrudController<ItemDto>
+    public class ItemsController : GenericCrudController<ItemDto>
     {
         private IItemService _itemService;
 
-        public ItemController(IItemService service) : base(service)
+        public ItemsController(IItemService service) : base(service)
         {
             _itemService = service;
         }
