@@ -18,7 +18,7 @@ namespace bootcamp_store_backend.Infrastructure.Persistence
             {
                 LoadCategories();
             }
-
+            storeContext.SaveChanges();
             if (!storeContext.Items.Any())
             {
                 LoadItems();
@@ -33,9 +33,9 @@ namespace bootcamp_store_backend.Infrastructure.Persistence
                 new Category{ Name="Chaquetas", Image=defaultImage },
                 new Category{ Name="Calzado", Image=defaultImage}
             };
-            foreach (Category c in categories)
+            foreach (Category category in categories)
             {
-                storeContext.Categories.Add(c);
+                storeContext.Categories.Add(category);
             }
         }
 
@@ -47,9 +47,9 @@ namespace bootcamp_store_backend.Infrastructure.Persistence
                 new Item{ Name="CHAQUETA CINTURA AJUSTABLE CON LINO", Price=34.95, CategoryId=1, Image=defaultImage},
                 new Item{ Name="ZAPATO ATADO CUÑA", Price=28.95, CategoryId=2, Image=defaultImage}
             };
-            foreach (Item i in items)
+            foreach (Item item in items)
             {
-                storeContext.Items.Add(i);
+                storeContext.Items.Add(item);
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using bootcamp_store_backend.Domain.Entities;
 using bootcamp_store_backend.Domain.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 

@@ -15,6 +15,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
 builder.Services.AddScoped(typeof(ISpecificationParser<>), typeof(SpecificationParser<>));
 builder.Services.AddScoped<IImageVerifier, ImageVerifier>();
+builder.Services.AddScoped<IStoreUnitOfWork, StoreUnitOfWork>();
 builder.Services.AddAutoMapper(typeof(CategoryMapperProfile));
 builder.Services.AddAutoMapper(typeof(ItemMapperProfile));
 // Add services to the container.
@@ -30,7 +31,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddDbContext<StoreContext>(options =>
-        options.UseInMemoryDatabase(connectionString)
+        options
+            .LogTo(s => System.Diagnostics.Debug.WriteLine(s))
+            .EnableDetailedErrors()
+            .EnableSensitiveDataLogging()
+            .UseSqlServer(connectionString)
     );
 }
 
@@ -43,6 +48,8 @@ if (builder.Environment.IsDevelopment())
     using var scope = app.Services.CreateScope();
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<StoreContext>();
+    context.Database.EnsureDeleted();
+    context.Database.EnsureCreated();
     DevelopmentDataLoader dataLoader = new(context);
     dataLoader.LoadData();
 }
